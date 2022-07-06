@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        body {
+            background-color: green;
+        }
+        body, div {
+            box-sizing: border-box;
+        }
+        #player, .mine, #goal, #result {
+            position: fixed;            
+        }
+        #result {
+            font-size: x-large;
+            top: 50%;
+            left: 50%;
+        }
+    </style>
+    <head>
+
+    </head>
+    <body>
+        <div id="player">🧍</div>
+        <div id="game"></div>
+        <div id="goal">🏠</div>
+        <p id="result"></p>
+    </body>
+    <script>
+        (()=>{
+            function getRandomIntInclusive(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+                }
+            
+            const getRandomPos = () => {
+                return {top: getRandomIntInclusive(1,100), left: getRandomIntInclusive(1,100)};
+            };
+
+            const goalPos = getRandomPos();
+            const moveIncrement = 1;
+            const topMax = 100;
+            const leftMax = 100;
+
+            const playerDom = document.getElementById('player');
+            const gameDom = document.getElementById('game');
+            const homeDom = document.getElementById('goal');
+
+            var playerPos = getRandomPos();
+            
+            homeDom.style.left = `${goalPos.left}%`;
+            homeDom.style.top = `${goalPos.top}%`;
+            
+            var minesPos = [];
+
+            const updatePlayer = () =>{
+                playerDom.style.top = `${playerPos.top}%`;
+                playerDom.style.left = `${playerPos.left}%`;
+            };
+            updatePlayer();
+
+            const getMineId = (minePos) => {
+                return `${minePos.left}_${minePos.top}`;
+            };
+
+            const addMine = () => {
+                const minePos = {top: getRandomIntInclusive(1,100), left: getRandomIntInclusive(1,100)};
+                const mine = document.createElement('div');
+                mine.id = getMineId(minePos);
+                mine.classList.add('mine');
+                mine.style.top = `${minePos.top}%`;
+                mine.style.left = `${minePos.left}%`;
+                mine.innerText = '💥';
+                gameDom.appendChild(mine);
+                minesPos = [...minesPos, minePos];
+            };
+
+            const isOccupied = (pos) => {
+                return !!document.getElementById(getMineId(pos));
+            };
+            const isPlayerHome = ()=> {
+                return playerPos.left === goalPos.left && playerPos.top === goalPos.top;
+            };
+            const displayEndGame = (playerWon) => {
+                if(playerWon) {
+                    for(var mine of document.getElementsByClassName('mine'))
+                    {
+                        mine.remove();
+                    }
+                }
+                document.getElementById('result').innerText = playerWon ? "You're Safe at Home!":"You DIED.";                
+            };
+
+            document.addEventListener('keydown', (event) => {
+                var newPos;
+                if(event.code === 'ArrowDown') {
+                    newPos = {...playerPos, top: playerPos.top + moveIncrement}; 
+                }
+                if(event.code === 'ArrowUp') {
+                    newPos =  {...playerPos, top: playerPos.top - moveIncrement};
+                }
+                if(event.code === 'ArrowLeft') {
+                    newPos = {...playerPos, left: playerPos.left - moveIncrement};
+                }
+                if(event.code === 'ArrowRight') {
+                    newPos = {...playerPos, left: playerPos.left + moveIncrement};
+                }
+                playerPos = isOccupied(newPos) ? playerPos : newPos;
+                updatePlayer();
+                
+                if(isPlayerHome()) {
+                    displayEndGame(true);
+                    return;
+                } else if(document.getElementById(getMineId(playerPos))) {
+                    displayEndGame(false);
+                    return;
+                } 
+                else {
+                    addMine();
+                addMine();
+                addMine();
+                addMine();
+                addMine();
+                addMine();
+                addMine();
+                }
+            });
+
+        })();
+    </script>
+</html>
