@@ -2,7 +2,7 @@
 <html>
     <style>
         body {
-            background-color: green;
+            background-color: greenyellow;
         }
         body, div {
             box-sizing: border-box;
@@ -105,20 +105,27 @@
                 if(event.code === 'ArrowRight') {
                     newPos = {...playerPos, left: playerPos.left + moveIncrement};
                 }
-                playerPos = isOccupied(newPos) ? playerPos : newPos;
-                updatePlayer();                
-            });
+                if(isOccupied(newPos)) {
+                    // stepped on a mine
+                    clearInterval(intervalId);
+                    displayEndGame(false);
+                    return;
+                }
 
-            const intervalId = setInterval(()=>{
+                playerPos = isOccupied(newPos) ? playerPos : newPos;
+                updatePlayer();        
+                
                 if(isPlayerHome()) {
                     clearInterval(intervalId);
                     displayEndGame(true);
 
                 } else if(document.getElementById(getMineId(playerPos))) {
                     clearInterval(intervalId);
-                        displayEndGame(false);
+                    displayEndGame(false);
                 } 
-                else {
+            });
+
+            const intervalId = setInterval(()=>{
                     addMine();
                     addMine();
                     addMine();
@@ -126,8 +133,7 @@
                     addMine();
                     addMine();
                     addMine();
-                }
-            }, 1000);
+            }, 500);
 
         })();
     </script>
