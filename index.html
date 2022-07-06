@@ -11,14 +11,19 @@
             position: fixed;            
         }
         #result {
-            font-size: x-large;
+            font-size: xx-large;
             top: 50%;
             left: 50%;
+        }
+        #help {
+            position: fixed;
+            font-size: large;
         }
     </style>
     <head>
 
     </head>
+    <div id="help">Use the Arrow Keys ←	↑	→	↓ to get Timmy 🧍 Home 🏠. Watch out for bombs! 💥 </div>
     <body>
         <div id="player">🧍</div>
         <div id="game"></div>
@@ -88,7 +93,7 @@
                         mine.remove();
                     }
                 }
-                document.getElementById('result').innerText = playerWon ? "You're Safe at Home!":"You DIED.";                
+                document.getElementById('result').innerText = playerWon ? "Timmy's safe at Home! ❤️":"Timmy DIED. 💀";                
             };
 
             document.addEventListener('keydown', (event) => {
