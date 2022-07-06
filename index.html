@@ -106,25 +106,28 @@
                     newPos = {...playerPos, left: playerPos.left + moveIncrement};
                 }
                 playerPos = isOccupied(newPos) ? playerPos : newPos;
-                updatePlayer();
-                
+                updatePlayer();                
+            });
+
+            const intervalId = setInterval(()=>{
                 if(isPlayerHome()) {
+                    clearInterval(intervalId);
                     displayEndGame(true);
-                    return;
+
                 } else if(document.getElementById(getMineId(playerPos))) {
-                    displayEndGame(false);
-                    return;
+                    clearInterval(intervalId);
+                        displayEndGame(false);
                 } 
                 else {
                     addMine();
-                addMine();
-                addMine();
-                addMine();
-                addMine();
-                addMine();
-                addMine();
+                    addMine();
+                    addMine();
+                    addMine();
+                    addMine();
+                    addMine();
+                    addMine();
                 }
-            });
+            }, 1000);
 
         })();
     </script>
