@@ -96,7 +96,6 @@
                 }
                 document.getElementById('result').innerText = playerWon ? "Timmy's safe at Home! ❤️":"Timmy DIED. 💀";                
             };
-
             document.addEventListener('keydown', (event) => {
                 var newPos;
                 if(event.code === 'ArrowDown') {
@@ -139,7 +138,7 @@
                     addMine();
                     addMine();
                     addMine();
-            }, 500);
+            }, 200);
 
         })();
     </script>
